@@ -39,7 +39,6 @@ def create_vector_db():
 
 # 🔹 Load LLM (Better than GPT-2)
 def load_llm():
-
     pipe = pipeline(
         "text2text-generation",
         model="google/flan-t5-small",
