@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Student Chatbot</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at top, #1e293b, #020617);
+            color: #e5e7eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 520px;
+            height: 680px;
+            background: #020617;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #1e293b;
+        }
+
+        .header {
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            color: white;
+        }
+
+        .chat-box {
+            flex: 1;
+            padding: 18px;
+            overflow-y: auto;
+            font-size: 17px;
+        }
+
+        .message {
+            margin: 12px 0;
+            padding: 14px;
+            border-radius: 14px;
+            max-width: 80%;
+            line-height: 1.5;
+        }
+
+        .user {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            align-self: flex-end;
+        }
+
+        .bot {
+            background: #111827;
+            border: 1px solid #1f2937;
+            align-self: flex-start;
+        }
+
+        .input-box {
+            display: flex;
+            padding: 12px;
+            background: #020617;
+            border-top: 1px solid #1e293b;
+        }
+
+        input {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            outline: none;
+            font-size: 16px;
+            background: #111827;
+            color: white;
+        }
+
+        button {
+            margin-left: 10px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #22c55e, #4ade80);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        /* 🔥 BIGGER EDUCATION ICONS */
+        .icons {
+            position: absolute;
+            font-size: 60px;  /* increased size */
+            opacity: 0.15;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        .icon1 { top: 8%; left: 8%; }
+        .icon2 { top: 75%; left: 85%; }
+        .icon3 { top: 50%; left: 3%; }
+        .icon4 { top: 20%; right: 10%; }
+        .icon5 { bottom: 10%; left: 40%; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- 📚 EDUCATION ICONS -->
+<div class="icons icon1">📚</div>
+<div class="icons icon2">💻</div>
+<div class="icons icon3">🎓</div>
+<div class="icons icon4">🧠</div>
+<div class="icons icon5">✏️</div>
+
+<div class="container">
+
+    <div class="header">
+        🤖 AI Student Chatbot ✨
+    </div>
+
+    <div class="chat-box" id="chat-box"></div>
+
+    <div class="input-box">
+        <input type="text" id="message" placeholder="Ask your syllabus doubt...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+</div>
+
+<script>
+    async function sendMessage() {
+        let input = document.getElementById("message");
+        let message = input.value;
+
+        if (!message) return;
+
+        let chatBox = document.getElementById("chat-box");
+
+        let userDiv = document.createElement("div");
+        userDiv.className = "message user";
+        userDiv.innerText = message;
+        chatBox.appendChild(userDiv);
+
+        input.value = "";
+
+        let botDiv = document.createElement("div");
+        botDiv.className = "message bot";
+        botDiv.innerText = "Typing...";
+        chatBox.appendChild(botDiv);
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        let response = await fetch("/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ message: message })
+        });
+
+        let data = await response.json();
+
+        botDiv.innerText = data.reply;
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
+
+</body>
+</html>
