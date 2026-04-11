@@ -1,5 +1,6 @@
 flask
 gunicorn
+torch --index-url https://download.pytorch.org/whl/cpu
 langchain
 langchain-community
 langchain-huggingface
@@ -7,5 +8,4 @@ faiss-cpu
 sentence-transformers
 #transformers==4.38.2
 transformers
-torch
 pypdf

@@ -3,6 +3,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_huggingface import HuggingFacePipeline
+
 from transformers import pipeline
 import os
 
@@ -31,7 +32,7 @@ def create_vector_db():
 
     # Create vector store
     vector_db = FAISS.from_documents(docs, embeddings)
-
+    vector_db.save_local("faiss_index")
     print("✅ Vector DB created successfully")
 
     return vector_db
@@ -42,6 +43,8 @@ def load_llm():
     pipe = pipeline(
         "text2text-generation",
         model="google/flan-t5-small",
+        device=-1, # -1 forces CPU usage
+        # model_kwargs={"torch_dtype": torch.float32},
         max_new_tokens=150
     )
 
